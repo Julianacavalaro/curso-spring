@@ -4,14 +4,34 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.*;
 
 import java.io.IOException;
+import java.net.URI;
 import java.net.URL;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.Scanner;
 
 public class JsonReaderDemo {
 
     private static final ObjectMapper mapper = new ObjectMapper();
     public static void main(String[] args) {
-        lercomScanner();
+      //  lercomScanner();
+        lerComHttpClient();
+    }
+
+    private static void lerComHttpClient() {
+        try (HttpClient client = HttpClient.newBuilder().build()) {
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://dummyjson.com/posts/1"))
+                    .build();
+            client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                    .thenApply(stringHttpResponse -> convertJsonToPost(stringHttpResponse.body()))
+               //     .thenAccept(System.out::println)
+                    .thenAccept(post -> System.out.println(post.getTitle()))
+                    .join();
+        } catch(Exception ex) {
+            System.err.println(ex.getMessage());
+        }
     }
 
     private static void lercomScanner() {
