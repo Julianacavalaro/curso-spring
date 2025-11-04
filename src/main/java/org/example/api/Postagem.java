@@ -1,4 +1,4 @@
-package org.example;
+package org.example.api;
 
 import lombok.*;
 
@@ -16,6 +16,4 @@ public class Postagem {
     private String nome;
     private String email;
     private LocalDate dob;
-
-
 }
