@@ -14,13 +14,16 @@ import java.util.Scanner;
 public class JsonReaderDemo {
 
     private static final ObjectMapper mapper = new ObjectMapper();
+    // reaproveita o HttpClient na aplicação inteira
+    private static final HttpClient client = HttpClient.newHttpClient();
+
     public static void main(String[] args) {
       //  lercomScanner();
         lerComHttpClient();
     }
 
     private static void lerComHttpClient() {
-        try (HttpClient client = HttpClient.newBuilder().build()) {
+        try {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create("https://dummyjson.com/posts/1"))
                     .build();
