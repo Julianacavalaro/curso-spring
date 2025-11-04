@@ -28,11 +28,6 @@ public class UsuarioRestController {
         return this.crieateDummy(dummy);
     }
 
-    @GetMapping
-    public List<Usuario> listarTodos(){
-        return this.usuarioList;
-    }
-
     @GetMapping("/{uuid}")
     public Usuario buscaUsuarioPorUuid(@PathVariable UUID uuid) {
         return usuarioList.stream()
