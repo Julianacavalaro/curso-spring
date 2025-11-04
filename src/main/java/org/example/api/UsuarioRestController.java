@@ -41,6 +41,14 @@ public class UsuarioRestController {
         return usuario;
     }
 
-//    @PutMapping
-//    public
+    @PutMapping
+    public void deletarUsuario(@PathVariable UUID uuid, @RequestBody Usuario usuarioNovo){
+        Usuario usuario = this.buscaUsuarioPorUuid(uuid);
+        this.usuarioList.set(this.usuarioList.indexOf(usuario), usuarioNovo);
+    }
+
+    @DeleteMapping
+    public void deletarUsuario(@PathVariable UUID uuid){
+        this.usuarioList.removeIf(usuario -> usuario.getUuid().equals(uuid));
+    }
 }
