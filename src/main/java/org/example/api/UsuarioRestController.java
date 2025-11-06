@@ -1,5 +1,7 @@
 package org.example.api;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -23,9 +25,9 @@ public class UsuarioRestController {
         return this.usuarioList;
     }
     @PostMapping("/create-dummy")
-    public Usuario crieateDummy(@RequestBody Usuario usuario){
+    public Usuario criateDummy(){
         Usuario dummy = new Usuario(UUID.randomUUID(),"/create-dummy", "email", LocalDate.now());
-        return this.crieateDummy(dummy);
+        return this.criarUsuario(dummy);
     }
 
     @GetMapping("/{uuid}")
@@ -36,18 +38,27 @@ public class UsuarioRestController {
                 .orElseThrow();
     }
     @PostMapping("/")
-    public Usuario criarUsuario(@RequestBody Usuario usuario){
+    public Usuario criarUsuario(@RequestBody @Valid Usuario usuario){
         this.usuarioList.add(usuario);
         return usuario;
     }
 
-    @PutMapping
-    public void deletarUsuario(@PathVariable UUID uuid, @RequestBody Usuario usuarioNovo){
+    @PutMapping("/{uuid}")
+    public Usuario atualizarUsuario(@PathVariable UUID uuid, @RequestBody @Valid Usuario usuarioNovo){
         Usuario usuario = this.buscaUsuarioPorUuid(uuid);
         this.usuarioList.set(this.usuarioList.indexOf(usuario), usuarioNovo);
+        return usuarioNovo;
     }
 
-    @DeleteMapping
+    @PatchMapping("/{uuid}/alterar-nome")
+    public Usuario atualizarNome(@PathVariable UUID uuid, @NotNull @RequestBody Usuario usuarioAlterado){
+        Usuario usuario = this.buscaUsuarioPorUuid(uuid);
+        usuario.setNome(usuarioAlterado.getNome());
+        this.usuarioList.set(this.usuarioList.indexOf(usuario), usuarioAlterado);
+        return usuarioAlterado;
+    }
+
+    @DeleteMapping("/{uuid}")
     public void deletarUsuario(@PathVariable UUID uuid){
         this.usuarioList.removeIf(usuario -> usuario.getUuid().equals(uuid));
     }

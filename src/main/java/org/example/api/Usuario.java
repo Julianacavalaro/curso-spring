@@ -16,10 +16,13 @@ import java.util.UUID;
 public class Usuario {
 
     private UUID uuid;
+
     @NotBlank
     private String nome;
+
     @Email
     private String email;
+
     @Past
     private LocalDate dob;
 
