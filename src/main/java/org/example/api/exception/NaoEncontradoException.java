@@ -1,0 +1,15 @@
+package org.example.api.exception;
+
+import org.springframework.http.HttpStatus;
+
+public class NaoEncontradoException extends AbstractException {
+
+    protected NaoEncontradoException(String message) {
+        super(message);
+    }
+
+    @Override
+    public HttpStatus getStatus() {
+        return HttpStatus.NOT_FOUND;
+    }
+}
