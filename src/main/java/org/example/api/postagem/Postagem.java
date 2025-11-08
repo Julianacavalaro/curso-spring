@@ -1,9 +1,8 @@
 package org.example.api.postagem;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
+import org.example.api.usuario.Usuario;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -24,4 +23,8 @@ public class Postagem {
     private String nome;
     private String email;
     private LocalDate dob;
+
+    @ManyToOne // Muitas postagens para 1 usuário
+    @JoinColumn(name = "usuario_id")
+    private Usuario autor;
 }
