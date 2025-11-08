@@ -1,7 +1,10 @@
 package org.example.api.usuario;
 
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import org.example.api.exception.NaoEncontradoException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -14,6 +17,12 @@ import java.util.UUID;
 public class UsuarioRestController {
 
     private final List<Usuario> usuarioList = new ArrayList<>();
+    private final UsuarioJpaRepository repository;
+
+    @Autowired
+    public UsuarioRestController(UsuarioJpaRepository repository) {
+        this.repository = repository;
+    }
 
     @GetMapping("/dummy")
     public Usuario dummyUsuario() {
@@ -21,33 +30,32 @@ public class UsuarioRestController {
     }
 
     @GetMapping
-    public List<Usuario> ListarTodos(){
-        return this.usuarioList;
+    public List<Usuario> listarTodos(){
+        return this.repository.findAll();
     }
+
     @PostMapping("/create-dummy")
     public Usuario criateDummy(){
+
         Usuario dummy = new Usuario(UUID.randomUUID(),"/create-dummy", "email", LocalDate.now());
         return this.criarUsuario(dummy);
     }
 
     @GetMapping("/{uuid}")
     public Usuario buscaUsuarioPorUuid(@PathVariable UUID uuid) {
-        return usuarioList.stream()
-                .filter(usuario -> usuario.getUuid().equals(uuid))
-                .findFirst()
-                .orElseThrow();
+        return this.repository.findByUuid(uuid)
+                .orElseThrow(() -> new NaoEncontradoException("Usuário não encontrado"));
     }
     @PostMapping("/")
     public Usuario criarUsuario(@RequestBody @Valid Usuario usuario){
-        this.usuarioList.add(usuario);
-        return usuario;
+        return this.repository.save(usuario);
     }
 
     @PutMapping("/{uuid}")
     public Usuario atualizarUsuario(@PathVariable UUID uuid, @RequestBody @Valid Usuario usuarioNovo){
         Usuario usuario = this.buscaUsuarioPorUuid(uuid);
-        this.usuarioList.set(this.usuarioList.indexOf(usuario), usuarioNovo);
-        return usuarioNovo;
+        usuarioNovo.setId(usuario.getId());
+        return this.repository.save(usuarioNovo);
     }
 
     @PatchMapping("/{uuid}/alterar-nome")
@@ -58,9 +66,10 @@ public class UsuarioRestController {
         return usuarioAlterado;
     }
 
+    @Transactional
     @DeleteMapping("/{uuid}")
     public void deletarUsuario(@PathVariable UUID uuid){
-        this.usuarioList.removeIf(usuario -> usuario.getUuid().equals(uuid));
+        this.repository.deleteByUuid(uuid);
     }
 
 //    @ResponseStatus(HttpStatus.BAD_REQUEST)

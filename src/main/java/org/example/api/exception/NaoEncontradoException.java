@@ -4,7 +4,7 @@ import org.springframework.http.HttpStatus;
 
 public class NaoEncontradoException extends AbstractException {
 
-    protected NaoEncontradoException(String message) {
+    public NaoEncontradoException(String message) {
         super(message);
     }
 
