@@ -1,0 +1,29 @@
+package org.example.api.usuario;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Past;
+import lombok.*;
+import org.springframework.context.annotation.Primary;
+
+import java.time.LocalDate;
+import java.util.UUID;
+
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
+public class UsuarioDTO {
+
+    private Long id;
+    private UUID uuid;
+    private String nome;
+    private String email;
+    private LocalDate dob;
+
+}

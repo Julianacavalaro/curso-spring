@@ -58,11 +58,13 @@ public class UsuarioRestController {
         return this.repository.save(usuarioNovo);
     }
 
+    @Transactional
     @PatchMapping("/{uuid}/alterar-nome")
-    public Usuario atualizarNome(@PathVariable UUID uuid, @NotNull @RequestBody Usuario usuarioAlterado){
-        Usuario usuario = this.buscaUsuarioPorUuid(uuid);
-        usuario.setNome(usuarioAlterado.getNome());
-        return this.repository.save(usuario);
+    public Usuario alterarNome(@PathVariable UUID uuid, @NotNull @RequestBody Usuario usuarioAlterado){
+//        Usuario usuario = this.buscaUsuarioPorUuid(uuid);
+//        usuario.setNome(usuarioAlterado.getNome());
+        this.repository.updateNome(uuid, usuarioAlterado.getNome());
+        return this.buscaUsuarioPorUuid(uuid);
     }
 
     @Transactional
