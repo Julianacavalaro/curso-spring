@@ -16,7 +16,7 @@ import java.util.UUID;
 @RequestMapping("/usuarios")
 public class UsuarioRestController {
 
-    private final List<Usuario> usuarioList = new ArrayList<>();
+  //  private final List<Usuario> usuarioList = new ArrayList<>();
     private final UsuarioJpaRepository repository;
 
     @Autowired
@@ -62,8 +62,7 @@ public class UsuarioRestController {
     public Usuario atualizarNome(@PathVariable UUID uuid, @NotNull @RequestBody Usuario usuarioAlterado){
         Usuario usuario = this.buscaUsuarioPorUuid(uuid);
         usuario.setNome(usuarioAlterado.getNome());
-        this.usuarioList.set(this.usuarioList.indexOf(usuario), usuarioAlterado);
-        return usuarioAlterado;
+        return this.repository.save(usuario);
     }
 
     @Transactional
