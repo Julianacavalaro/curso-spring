@@ -3,7 +3,9 @@ package org.example.api.usuario;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import org.example.api.exception.DuplicadoException;
 import org.example.api.exception.NaoEncontradoException;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,10 +20,12 @@ public class UsuarioRestController {
 
   //  private final List<Usuario> usuarioList = new ArrayList<>();
     private final UsuarioJpaRepository repository;
+    private final ModelMapper modelMapper;
 
     @Autowired
-    public UsuarioRestController(UsuarioJpaRepository repository) {
+    public UsuarioRestController(UsuarioJpaRepository repository, ModelMapper modelMapper) {
         this.repository = repository;
+        this.modelMapper = modelMapper;
     }
 
     @GetMapping("/dummy")
@@ -42,10 +46,26 @@ public class UsuarioRestController {
     }
 
     @GetMapping("/{uuid}")
-    public Usuario buscaUsuarioPorUuid(@PathVariable UUID uuid) {
-        return this.repository.findByUuid(uuid)
-                .orElseThrow(() -> new NaoEncontradoException("Usuário não encontrado"));
+    public UsuarioDTO buscarPorUuidDTO(@PathVariable UUID uuid) {
+        Usuario usuario = buscarPorUuid(uuid);
+        return this.modelMapper.map(usuario, UsuarioDTO.class);
     }
+    public Usuario buscarPorUuid(UUID uuid) {
+
+        List<Usuario> usuarios = this.repository.findByUuid(uuid);
+
+        if (usuarios.isEmpty()) {
+            throw new NaoEncontradoException("Usuário não encontrado para UUID: " + uuid);
+        }
+
+        if (usuarios.size() > 1) {
+            throw new DuplicadoException("Há mais de um usuário com o UUID: " + uuid);
+        }
+
+        return usuarios.get(0);
+    }
+
+
     @PostMapping("/")
     public Usuario criarUsuario(@RequestBody @Valid Usuario usuario){
         return this.repository.save(usuario);
@@ -53,7 +73,7 @@ public class UsuarioRestController {
 
     @PutMapping("/{uuid}")
     public Usuario atualizarUsuario(@PathVariable UUID uuid, @RequestBody @Valid Usuario usuarioNovo){
-        Usuario usuario = this.buscaUsuarioPorUuid(uuid);
+        Usuario usuario = this.buscarPorUuid(uuid);
         usuarioNovo.setId(usuario.getId());
         return this.repository.save(usuarioNovo);
     }
@@ -64,7 +84,7 @@ public class UsuarioRestController {
 //        Usuario usuario = this.buscaUsuarioPorUuid(uuid);
 //        usuario.setNome(usuarioAlterado.getNome());
         this.repository.updateNome(uuid, usuarioAlterado.getNome());
-        return this.buscaUsuarioPorUuid(uuid);
+        return this.buscarPorUuid(uuid);
     }
 
     @Transactional

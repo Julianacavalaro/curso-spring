@@ -6,19 +6,21 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 @Repository
 public interface UsuarioJpaRepository extends JpaRepository<Usuario, Long> {
 
-   Optional<Usuario> findByUuid(UUID uuid);
+   List<Usuario> findByUuid(UUID uuid);
 
    void deleteByUuid(UUID uuid);
 
    @Modifying
    @Query("update Usuario u set u.nome = :nome where u.uuid = :uuid")//jpql
    void updateNome(@Param("uuid")UUID uuid, @Param("nome")String nome);
+
 
 
 }

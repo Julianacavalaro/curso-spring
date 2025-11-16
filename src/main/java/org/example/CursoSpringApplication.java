@@ -1,8 +1,10 @@
 package org.example;
 
 import org.example.hello.HelloWord;
+import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
 public class CursoSpringApplication {
@@ -11,5 +13,10 @@ public class CursoSpringApplication {
         SpringApplication.run(CursoSpringApplication.class, args);
         HelloWord helloWord = new HelloWord();
        System.out.println(helloWord.hello());
+    }
+
+    @Bean
+    public ModelMapper modelMapper(){
+        return new ModelMapper();
     }
 }
