@@ -7,6 +7,8 @@ import org.example.api.exception.DuplicadoException;
 import org.example.api.exception.NaoEncontradoException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -34,8 +36,8 @@ public class UsuarioRestController {
     }
 
     @GetMapping
-    public List<Usuario> listarTodos(){
-        return this.repository.findAll();
+    public Page<Usuario> listarTodos(Pageable peageable){
+        return this.repository.findAll(peageable);
     }
 
     @PostMapping("/create-dummy")
