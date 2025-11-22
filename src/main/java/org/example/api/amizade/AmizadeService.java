@@ -5,6 +5,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class AmizadeService {
@@ -22,6 +24,12 @@ public class AmizadeService {
         dto.setId(amizade.getId());
         dto.setUsuarioA(amizade.getUsuarioA());
         dto.setUsuarioB(amizade.getUsuarioB());
+        return dto;
+    }
+
+    private AmizadeDTO criarAmizade(UUID usuarioA, UUID usuarioB) {
+        AmizadeDTO dto = new AmizadeDTO();
+
         return dto;
     }
 }
