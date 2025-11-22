@@ -7,9 +7,11 @@ import org.example.api.usuario.Usuario;
 @Setter
 @ToString
 @NoArgsConstructor
+@AllArgsConstructor
 public class AmizadeDTO {
 
     private Long id;
     private Usuario usuarioA;
     private Usuario usuarioB;
+
 }
