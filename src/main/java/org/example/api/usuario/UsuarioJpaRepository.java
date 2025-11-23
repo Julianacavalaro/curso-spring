@@ -13,7 +13,7 @@ import java.util.UUID;
 @Repository
 public interface UsuarioJpaRepository extends JpaRepository<Usuario, Long> {
 
-   List<Usuario> findByUuid(UUID uuid);
+    Usuario findByUuid(UUID uuid);
 
    void deleteByUuid(UUID uuid);
 
@@ -21,6 +21,5 @@ public interface UsuarioJpaRepository extends JpaRepository<Usuario, Long> {
    @Query("update Usuario u set u.nome = :nome where u.uuid = :uuid")//jpql
    void updateNome(@Param("uuid")UUID uuid, @Param("nome")String nome);
 
-
-
+    List<Usuario> findByListUuid(UUID uuid);
 }

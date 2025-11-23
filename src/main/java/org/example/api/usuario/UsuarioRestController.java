@@ -54,7 +54,7 @@ public class UsuarioRestController {
     }
     public Usuario buscarPorUuid(UUID uuid) {
 
-        List<Usuario> usuarios = this.repository.findByUuid(uuid);
+        List<Usuario> usuarios = this.repository.findByListUuid(uuid);
 
         if (usuarios.isEmpty()) {
             throw new NaoEncontradoException("Usuário não encontrado para UUID: " + uuid);
