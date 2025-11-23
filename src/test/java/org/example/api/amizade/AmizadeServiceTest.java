@@ -4,6 +4,7 @@ import org.example.api.exception.AmizadeInvalidadeBusinessException;
 import org.example.api.usuario.Usuario;
 import org.example.api.usuario.UsuarioService;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -27,16 +28,7 @@ class AmizadeServiceTest {
     private AmizadeService amizadeService;
 
     @Test
-    void falhaCriarAmizade() {
-        //cenário
-    UUID usuarioA = UUID.fromString("550e8400-e29b-41d4-a716-446655440000");
-    UUID usuarioB = UUID.fromString("550e8400-e29b-41d4-a716-446655440000");
-    //ação
-    //this.amizadeService.criarAmizade(usuarioA, usuarioB);
-    //validação
-        Assertions.assertThrows(AmizadeInvalidadeBusinessException.class, ()-> this.amizadeService.criarAmizade(usuarioA, usuarioB));
-    }
-    @Test
+    @DisplayName("Sucesso ao criar amizade")
     void sucessoCriarAmizade() {
         //cenário
         UUID usuarioA = UUID.fromString("550e8400-e29b-41d4-a716-446655440000");
@@ -49,4 +41,17 @@ class AmizadeServiceTest {
         //validação
         Assertions.assertEquals(new AmizadeDTO(), amizadeDTO);
     }
+
+    @Test
+    @DisplayName("Falha ao criar amizade")
+    void falhaCriarAmizade() {
+        //cenário
+    UUID usuarioA = UUID.fromString("550e8400-e29b-41d4-a716-446655440000");
+    UUID usuarioB = UUID.fromString("550e8400-e29b-41d4-a716-446655440000");
+    //ação
+    //this.amizadeService.criarAmizade(usuarioA, usuarioB);
+    //validação
+        Assertions.assertThrows(AmizadeInvalidadeBusinessException.class, ()-> this.amizadeService.criarAmizade(usuarioA, usuarioB));
+    }
+
 }

@@ -3,9 +3,8 @@ package org.example.api.amizade;
 import jakarta.persistence.*;
 import lombok.*;
 import org.example.api.usuario.Usuario;
-@Getter
-@Setter
-@ToString
+
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class AmizadeDTO {
