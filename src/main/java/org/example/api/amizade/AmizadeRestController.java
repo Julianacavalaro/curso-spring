@@ -19,7 +19,7 @@ public class AmizadeRestController {
         return this.service.listarTodos(pageable);
     }
 
-    @PostMapping("/{usuarioA/{usuarioB}")
+    @PostMapping("/{usuarioA}/{usuarioB}")
     public AmizadeDTO criarAmizade(@PathVariable UUID usuarioA, @PathVariable UUID usuarioB){
         return this.service.criarAmizade(usuarioA, usuarioB);
     }

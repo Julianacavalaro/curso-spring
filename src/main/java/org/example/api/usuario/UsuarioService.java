@@ -19,6 +19,6 @@ public class UsuarioService {
         return usuarioJpaRepository.findByUuid(usuarioA);
     }
     public List<Usuario> buscaListaPorUuid(@NotNull UUID usuarioA){
-        return usuarioJpaRepository.findByListUuid(usuarioA);
+        return usuarioJpaRepository.findByUuidIn(List.of(usuarioA));
     }
 }
