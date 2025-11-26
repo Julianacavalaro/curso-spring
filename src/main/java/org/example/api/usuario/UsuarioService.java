@@ -1,6 +1,7 @@
 package org.example.api.usuario;
 
 import jakarta.validation.constraints.NotNull;
+import org.example.api.exception.NaoEncontradoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,7 @@ public class UsuarioService {
     private UsuarioJpaRepository usuarioJpaRepository;
 
     public Usuario buscarPorUuid(@NotNull UUID usuarioA) {
-        return usuarioJpaRepository.findByUuid(usuarioA);
+        return usuarioJpaRepository.findByUuid(usuarioA).orElseThrow(() -> new NaoEncontradoException("Usuário Não emcontrado"));
     }
     public List<Usuario> buscaListaPorUuid(@NotNull UUID usuarioA){
         return usuarioJpaRepository.findByUuidIn(List.of(usuarioA));

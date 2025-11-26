@@ -13,10 +13,7 @@ import java.util.UUID;
 @Repository
 public interface UsuarioJpaRepository extends JpaRepository<Usuario, Long> {
 
-    default Usuario findByUuid(UUID uuid) {
-        return null;
-    }
-
+    Optional<Usuario>  findByUuid(UUID uuid);
     void deleteByUuid(UUID uuid);
 
    @Modifying
