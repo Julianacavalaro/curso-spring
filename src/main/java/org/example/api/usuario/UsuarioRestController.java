@@ -3,6 +3,8 @@ package org.example.api.usuario;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import org.example.api.amizade.Amizade;
+import org.example.api.amizade.AmizadeDTO;
 import org.example.api.exception.DuplicadoException;
 import org.example.api.exception.NaoEncontradoException;
 import org.modelmapper.ModelMapper;
@@ -23,11 +25,17 @@ public class UsuarioRestController {
   //  private final List<Usuario> usuarioList = new ArrayList<>();
     private final UsuarioJpaRepository repository;
     private final ModelMapper modelMapper;
+    private final UsuarioService usuarioService;
 
     @Autowired
-    public UsuarioRestController(UsuarioJpaRepository repository, ModelMapper modelMapper) {
+    public UsuarioRestController(UsuarioJpaRepository repository, ModelMapper modelMapper, UsuarioService usuarioService) {
         this.repository = repository;
         this.modelMapper = modelMapper;
+        this.usuarioService = usuarioService;
+    }
+
+    public UsuarioDTO convertToDto(Usuario usuario ){
+        return this.modelMapper.map(usuario, UsuarioDTO.class);
     }
 
     @GetMapping("/dummy")
@@ -49,8 +57,10 @@ public class UsuarioRestController {
 
     @GetMapping("/{uuid}")
     public UsuarioDTO buscarPorUuidDTO(@PathVariable UUID uuid) {
-        Usuario usuario = buscarPorUuid(uuid);
-        return this.modelMapper.map(usuario, UsuarioDTO.class);
+        Usuario usuario = this.usuarioService.buscarPorUuid(uuid);
+        return convertToDto(usuario);
+                //buscarPorUuid(uuid);
+      //  return this.modelMapper.map(usuario, UsuarioDTO.class);
     }
     public Usuario buscarPorUuid(UUID uuid) {
 
