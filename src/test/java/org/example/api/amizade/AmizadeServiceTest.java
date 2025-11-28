@@ -12,7 +12,12 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.UUID;
 
 @ExtendWith(MockitoExtension.class)
@@ -54,4 +59,46 @@ class AmizadeServiceTest {
         Assertions.assertThrows(AmizadeInvalidadeBusinessException.class, ()-> this.amizadeService.criarAmizade(usuarioA, usuarioB));
     }
 
+    @Test
+    @DisplayName("Sucesso ao listar amizades (listarTodos)")
+    void sucessoListarTodos() {
+        // CENÁRIO
+        Pageable pageable = PageRequest.of(0, 10);
+
+        Amizade amizade1 = new Amizade();
+        Amizade amizade2 = new Amizade();
+
+        List<Amizade> listaAmizades = List.of(amizade1, amizade2);
+        Page<Amizade> pageAmizades = new PageImpl<>(listaAmizades, pageable, listaAmizades.size());
+
+        // Mock do repository
+        Mockito.when(this.amizadeRepository.findAll(pageable)).thenReturn(pageAmizades);
+
+        // Mock do ModelMapper / convertToDto
+        AmizadeDTO dto1 = new AmizadeDTO();
+        AmizadeDTO dto2 = new AmizadeDTO();
+
+        Mockito.when(this.modelMapper.map(amizade1, AmizadeDTO.class)).thenReturn(dto1);
+        Mockito.when(this.modelMapper.map(amizade2, AmizadeDTO.class)).thenReturn(dto2);
+
+        // AÇÃO
+        Page<AmizadeDTO> resultado = this.amizadeService.listarTodos(pageable);
+
+        // VALIDAÇÃO
+        Assertions.assertNotNull(resultado);
+        Assertions.assertEquals(2, resultado.getContent().size());
+
+        // como o service criou new PageImpl<>(listaConvertida) sem pageable/total,
+        // aqui o totalElements será igual ao tamanho da lista (2)
+        Assertions.assertEquals(2, resultado.getTotalElements());
+
+        // valida se os DTOs retornados são exatamente os mapeados
+        Assertions.assertEquals(dto1, resultado.getContent().get(0));
+        Assertions.assertEquals(dto2, resultado.getContent().get(1));
+
+        // verifica se chamou o repository e o mapper como esperado
+        Mockito.verify(this.amizadeRepository, Mockito.times(1)).findAll(pageable);
+        Mockito.verify(this.modelMapper, Mockito.times(1)).map(amizade1, AmizadeDTO.class);
+        Mockito.verify(this.modelMapper, Mockito.times(1)).map(amizade2, AmizadeDTO.class);
+    }
 }

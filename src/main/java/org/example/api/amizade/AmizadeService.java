@@ -27,7 +27,9 @@ public class AmizadeService {
 
     public Page<AmizadeDTO> listarTodos(Pageable pageable) {
         Page<Amizade> usuarios = this.repository.findAll(pageable);
-        return new PageImpl<>(usuarios.getContent().stream().map(this::convertToDto).toList());
+        return new PageImpl<>(usuarios.getContent().stream()
+                .map(this::convertToDto)
+                .toList());
     }
     public AmizadeDTO convertToDto(Amizade amizade ){
         return this.modelMapper.map(amizade, AmizadeDTO.class);
