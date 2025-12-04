@@ -3,6 +3,7 @@ package org.example.api.usuario;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import lombok.RequiredArgsConstructor;
 import org.example.api.amizade.Amizade;
 import org.example.api.amizade.AmizadeDTO;
 import org.example.api.exception.DuplicadoException;
@@ -20,6 +21,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/usuarios")
+@RequiredArgsConstructor
 public class UsuarioRestController {
 
   //  private final List<Usuario> usuarioList = new ArrayList<>();
@@ -27,12 +29,12 @@ public class UsuarioRestController {
     private final ModelMapper modelMapper;
     private final UsuarioService usuarioService;
 
-    @Autowired
-    public UsuarioRestController(UsuarioJpaRepository repository, ModelMapper modelMapper, UsuarioService usuarioService) {
-        this.repository = repository;
-        this.modelMapper = modelMapper;
-        this.usuarioService = usuarioService;
-    }
+//    @Autowired
+//    public UsuarioRestController(UsuarioJpaRepository repository, ModelMapper modelMapper, UsuarioService usuarioService) {
+//        this.repository = repository;
+//        this.modelMapper = modelMapper;
+//        this.usuarioService = usuarioService;
+//    }
 
     public UsuarioDTO convertToDto(Usuario usuario ){
         return this.modelMapper.map(usuario, UsuarioDTO.class);
